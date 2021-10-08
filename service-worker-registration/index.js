@@ -7,15 +7,9 @@ function hasServiceWorkerUpdate(resolve) {
       const { installing } = reg
 
       installing.onstatechange = function () {
+        console.log('>>> onstatechange')
         if (installing.state === 'activated') {
-          if (localStorage.getItem('sw_registered') === 'ok') {
-            console.log('>>> installing.onstatechange activated second time')
-            resolve(navigator.serviceWorker.controller !== null)
-          } else {
-            console.log('>>> installing.onstatechange activated first time')
-            localStorage.setItem('sw_registered', 'ok')
-            resolve(false)
-          }
+          resolve(navigator.serviceWorker.controller !== null)
         }
       }
     }
