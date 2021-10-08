@@ -43,8 +43,6 @@ export default Service.extend(Evented, {
 
   _attachUpdateHandler() {
     serviceWorkerHasUpdate().then((hasUpdate) => {
-      this.pollingTask.cancelAll()
-
       console.log('>>> serviceWorkerHasUpdate', hasUpdate)
       if (hasUpdate) {
         this.set('hasUpdate', true)
