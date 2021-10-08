@@ -11,16 +11,16 @@ const supportsServiceWorker =
   typeof navigator !== 'undefined' && 'serviceWorker' in navigator
 
 async function update() {
-  console.log('>>> register with service worker')
-  const reg = await navigator.serviceWorker.register(
-    '{{ROOT_URL}}{{SERVICE_WORKER_FILENAME}}',
-    { scope: '{{ROOT_URL}}' },
-  )
+  if ('serviceWorker' in navigator) {
+    console.log('>>> register with service worker')
+    const reg = await navigator.serviceWorker.register(
+      '{{ROOT_URL}}{{SERVICE_WORKER_FILENAME}}',
+      { scope: '{{ROOT_URL}}' },
+    )
 
-  console.log(
-    '>>> registration.update() --> check server for updated version of the service worker',
-  )
-  return reg.update()
+    console.log('>>> registration.update()')
+    return reg.update()
+  }
 }
 
 export default Service.extend(Evented, {
@@ -30,10 +30,6 @@ export default Service.extend(Evented, {
     let config = getOwner(this).resolveRegistration('config:environment')[
       configKey
     ]
-    console.log(
-      '>>> polling interval',
-      (config && config.pollingInterval) || 120000,
-    )
     return (config && config.pollingInterval) || 120000
   }),
 
