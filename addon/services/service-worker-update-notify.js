@@ -17,6 +17,9 @@ async function update() {
     { scope: '{{ROOT_URL}}' },
   )
 
+  console.log(
+    '>>> registration.update() --> check server for updated version of the service worker',
+  )
   return reg.update()
 }
 
@@ -27,6 +30,10 @@ export default Service.extend(Evented, {
     let config = getOwner(this).resolveRegistration('config:environment')[
       configKey
     ]
+    console.log(
+      '>>> polling interval',
+      (config && config.pollingInterval) || 120000,
+    )
     return (config && config.pollingInterval) || 120000
   }),
 
@@ -42,6 +49,7 @@ export default Service.extend(Evented, {
     serviceWorkerHasUpdate().then((hasUpdate) => {
       this.pollingTask.cancelAll()
 
+      console.log('>>> serviceWorkerHasUpdate', hasUpdate)
       if (hasUpdate) {
         this.set('hasUpdate', true)
         this.trigger('update')
