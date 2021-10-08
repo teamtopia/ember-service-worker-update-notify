@@ -12,13 +12,11 @@ const supportsServiceWorker =
 
 async function update() {
   if ('serviceWorker' in navigator) {
-    console.log('>>> register with service worker')
     const reg = await navigator.serviceWorker.register(
       '{{ROOT_URL}}{{SERVICE_WORKER_FILENAME}}',
       { scope: '{{ROOT_URL}}' },
     )
 
-    console.log('>>> registration.update()')
     return reg.update()
   }
 }
@@ -43,7 +41,6 @@ export default Service.extend(Evented, {
 
   _attachUpdateHandler() {
     serviceWorkerHasUpdate().then((hasUpdate) => {
-      console.log('>>> serviceWorkerHasUpdate', hasUpdate)
       if (hasUpdate) {
         this.set('hasUpdate', true)
         this.trigger('update')

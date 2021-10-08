@@ -3,11 +3,9 @@ import { addSuccessHandler } from 'ember-service-worker/service-worker-registrat
 function hasServiceWorkerUpdate(resolve) {
   addSuccessHandler(function (reg) {
     reg.onupdatefound = function () {
-      console.log('>>> onupdatefound')
       const { installing } = reg
 
       installing.onstatechange = function () {
-        console.log('>>> onstatechange')
         if (installing.state === 'activated') {
           resolve(navigator.serviceWorker.controller !== null)
         }
