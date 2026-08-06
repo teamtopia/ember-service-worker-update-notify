@@ -29,6 +29,9 @@ module('Unit | Service | service-worker-update-notify', function(hooks) {
   // The polling loop is skipped at init when Ember.testing, so it had no
   // coverage at all. These drive `_poll` directly with `_update` stubbed, and
   // assert on the armed timer rather than waiting out pollingInterval.
+  //
+  // No manual teardown: owner teardown destroys the service, which clears any
+  // timer these leave armed.
   module('polling', function() {
     test('checks for an update and arms the next poll', async function(assert) {
       let service = this.owner.lookup('service:service-worker-update-notify');
@@ -42,8 +45,6 @@ module('Unit | Service | service-worker-update-notify', function(hooks) {
 
       assert.strictEqual(calls, 1, 'checked for an update');
       assert.ok(service._pollTimer, 'armed the next poll');
-
-      service.willDestroy();
     });
 
     test('keeps polling after a failed check', async function(assert) {
@@ -56,8 +57,6 @@ module('Unit | Service | service-worker-update-notify', function(hooks) {
         service._pollTimer,
         'a rejected check still arms the next poll',
       );
-
-      service.willDestroy();
     });
 
     test('willDestroy cancels a pending poll', async function(assert) {

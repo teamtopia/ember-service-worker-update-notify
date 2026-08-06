@@ -49,7 +49,7 @@ The poll interval can be configured in your `config/environment.js` with:
 module.exports = function(environment) {
   let ENV = {
     'ember-service-worker-update-notify': {
-      pollingInterval: 1200000 // Default is 20min
+      pollingInterval: 1200000 // Default is 2min
     }
   };
 
@@ -95,7 +95,6 @@ module('Application | Index', function(hooks) {
 ## Installation
 
 ```bash
-yarn add --dev ember-concurrency # peer-dependency
 yarn add --dev ember-service-worker-update-notify
 ```
 
