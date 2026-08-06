@@ -32,13 +32,22 @@ export default Service.extend(Evented, {
 
   _pollTimer: null,
 
+  // Seam for tests: `update` is module-private, so the polling loop would
+  // otherwise be unstubbable.
+  _update() {
+    return update()
+  },
+
   // Was an ember-concurrency task (`while (true) { yield update(); yield
   // timeout(...) }`). Plain timers do the same job without the dependency —
   // which matters because ember-concurrency v5 removed the generator task form
   // and, as a v1 addon, this one cannot register the Babel transform the
   // modern async-arrow form needs.
+  //
+  // Returns the promise for the current cycle so tests can await it; nothing
+  // in the app does.
   _poll() {
-    update()
+    return this._update()
       .catch(() => {
         // Keep polling after a failed registration check. The task version
         // aborted the loop for good on the first rejection, so a single
